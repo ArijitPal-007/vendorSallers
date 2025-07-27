@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    //cart logic
+    let couponDiscount = 0;
+    function displayCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsDiv = document.getElementById("cart-items");
+//empty cart
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+      }
+//cart logic with price title and image all
+      let total = 0;
+      cartItemsDiv.innerHTML = "";
+      cart.forEach((item, index) => {
+        total += item.price * item.quantity;
+        cartItemsDiv.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" style="width: 100px; float: left; margin-right: 15px;">
+            <div style="overflow: hidden;">
+              <strong>${item.name}</strong><br>
+              Price: ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}<br>
+              <button onclick="updateQuantity(${index}, 1)">+</button>
+              <button onclick="updateQuantity(${index}, -1)">-</button>
+              <button onclick="removeItem(${index})">Remove</button>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        `;
+      });
+      if (couponDiscount > 0) {
+        cartItemsDiv.innerHTML += `<div class="total">Subtotal: ₹<span id="cartTotal">${(total - couponDiscount).toFixed(2)}</span> <small>(Discount ₹${couponDiscount.toFixed(2)})</small></div>`;
+      } else 
+
+      cartItemsDiv.innerHTML += `<div class="total">Cart Total: ₹<span id="cartTotal">${total.toFixed(2)}</span></div>`;
+    }
+//quantity update logic
+    function updateQuantity(index, change) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart[index].quantity += change;
+
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+//local storage fetch
+      localStorage.setItem("cart", JSON.stringify(cart));
+      displayCart();
+    }
+//removal of item present in cart
+    function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      displayCart();
+    }
+//clear cart logic
+    function clearCart() {
+      localStorage.removeItem("cart");
+      displayCart();
+      document.getElementById("deliveryResult").innerText = "";
+    }
+
+
+//apply delivery charge function
+    async function applyDeliveryCharge() {
+  const pincode = document.getElementById("pincode").value.trim();
+  const cartTotal = parseFloat(document.getElementById("cartTotal").innerText);
+  const resultDiv = document.getElementById("deliveryResult");
+//pincode entry
+  if (pincode.length !== 6 || isNaN(pincode)) {
+    alert("Please enter a valid 6-digit pincode.");
+    return;
+  }
+
+  if (isNaN(cartTotal) || cartTotal === 0) {
+    alert("Cart is empty.");
+    return;
+  }
+//indiapost api integration
+  try {
+    const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+    const data = await response.json();
+
+    if (data[0].Status !== "Success" || !data[0].PostOffice || data[0].PostOffice.length === 0) {
+      resultDiv.innerHTML = `<p style="color:red;">❌ Invalid pincode or service unavailable.</p>`;
+      return;
+    }
+ //apply delivery charge according to pincode
+    const state = data[0].PostOffice[0].State;
+    const deliveryCharge = (state === "West Bengal") ? 70 : 100;
+    const finalAmount = cartTotal + deliveryCharge;
+
+  //total cart charge 
+     resultDiv.innerHTML = `
+      <p style="color:green;"><strong>✅ Pincode Verified:</strong> ${state}</p>
+      <p>Delivery Charge: ₹${deliveryCharge}</p>
+      <p><strong>Total Payable: ₹${finalAmount.toFixed(2)}</strong></p>
+    `;
+
+  } catch (error) {
+    console.error(error);
+    resultDiv.innerHTML = `<p style="color:red;">Error verifying pincode. Please try again later.</p>`;
+  }
+}
+
+
+
+
+//cart display
+    window.onload = displayCart;
+    const checkoutData = {
+      cartTotal: cartTotal,
+      deliveryCharge: deliveryCharge,
+        finalAmount: finalAmount,
+        pincode: pincode,
+        state: state,
+        district: district
+      };
+      localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+    
+
+  </script>
+  <!--script end here-->
+</head>
+<!--html for cart starts from here-->
+<body>
+  <h1>Your Cart</h1>
+
+  
+  <div id="cart-items"></div>
+  <!-- 🚚 Pincode input and delivery charge section -->
+  <div style="max-width: 500px; margin: 20px auto; text-align: center;">
+    <label for="pincode"><strong>Enter Your Delivery Pincode:</strong></label><br>
+    <input type="text" id="pincode" placeholder="e.g. 700001" />
+    <button onclick="applyDeliveryCharge()">Apply Delivery Charge</button>
+    <div id="deliveryResult" style="margin-top: 10px; font-weight: bold;"></div>
+  </div>
+
+
+
+<!--clear cart function-->
+  <div style="text-align: center;">
+    <button onclick="clearCart()">Clear Entire Cart</button>
+    <br><br>
+    
+
+
+
+
+
+    <!-- Checkout Toggle -->
+<button id="checkout-toggle" style="margin-top: 20px;">Proceed to Checkout</button>
+
+<!-- Hidden Checkout Section -->
+<div id="checkout-section" style="display: none; margin-top: 20px;">
+  <h2>Checkout</h2>
+  <form id="checkout-form">
+    <input type="text" id="name" placeholder="Your Name" required><br><br>
+    <textarea id="address" placeholder="Full Address" required></textarea><br><br>
+    <input type="text" id="landmark" placeholder="Landmark" required><br><br>
+    <input type="text" id="pincode" placeholder="Pincode" required><br><br>
+
+    <!-- Auto-filled District and State -->
+    <input type="text" id="district" placeholder="District" readonly><br><br>
+    <input type="text" id="state" placeholder="State" readonly><br><br>
+
+    <input type="tel" id="phone" placeholder="Phone Number" required><br><br>
+    <button type="submit">Send Order via WhatsApp</button>
+  </form>
+
+</div>
+
+<!--checkout toggle java script-->
+<script>
+  document.getElementById('checkout-toggle').addEventListener('click', function () {
+    const section = document.getElementById('checkout-section');
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+  });
+//fetchign from local storage
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+  function getCartSummary() {
+    if (cartItems.length === 0) return { summary: "No books selected.", total: 0 };
+//name entry and prefetch data send to provider
+    let subtotal = 0;
+    let summary = cartItems.map(item => {
+      const name = item.name;
+      const qty = item.quantity || 1;
+      const price = item.price || 0;
+      const lineTotal = qty * price;
+      subtotal += lineTotal;
+      return `📚 ${name} x ${qty} @ ₹${price} = ₹${lineTotal}`;
+    }).join('\n');
+
+    return { summary, total: subtotal };
+  }
+
+  // Handle Pincode change
+  document.getElementById('pincode').addEventListener('blur', async function () {
+    const pincode = this.value.trim();
+    if (pincode.length !== 6) return;
+
+    const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+    const data = await res.json();
+
+    if (data[0].Status === "Success" && data[0].PostOffice && data[0].PostOffice.length > 0) {
+      const post = data[0].PostOffice[0];
+      document.getElementById('district').value = post.District;
+      document.getElementById('state').value = post.State;
+    } else {
+      document.getElementById('district').value = '';
+      document.getElementById('state').value = '';
+      alert("Invalid pincode. Please check.");
+    }
+  });
+
+  // Handle Submit
+  document.getElementById('checkout-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const landmark = document.getElementById('landmark').value.trim();
+    const pincode = document.getElementById('pincode').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const state = document.getElementById('state').value.trim();
+    const district = document.getElementById('district').value.trim();
+
+    const { summary, total: subtotal } = getCartSummary();
+
+    let deliveryCharge = (state === "West Bengal") ? 70 : 100;
+    const grandTotal = subtotal + deliveryCharge;
+    const upiId = "rajdipghosh2004-1@oksbi";
+    const upiString = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${grandTotal}&cu=INR&tn=Book%20Order`;
+
+// 👉 2. Encode it for WhatsApp
+const encodedUpiLink = encodeURIComponent(upiString);
+
+    const message =
+  `🛒 *New Book Order!*\n\n${summary}\n\n` +
+  `Subtotal: ₹${subtotal}\nDelivery (${state}): ₹${deliveryCharge}\n*Grand Total: ₹${grandTotal}*\n\n` +
+  `Address: ${address}\n` +
+  (landmark ? `Landmark: ${landmark}\n` : '') +
+  `Pincode: ${pincode}\nDistrict: ${district}\nState: ${state}\n` +
+  `Name: ${name}\nPhone: ${phone}\n\n` +
+  `💰 Click below to pay via UPI (Google Pay, PhonePe, Paytm):\n${upiString}\n\n` +
+`✅ Or open this link in UPI app:\n[Click to Pay](${upiString})`;
+
+
+    const businessNumber = '916295823968'; // <-- WhatsApp number
+    const whatsappURL = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+  });
+
+
+
+
+
+          //chat box ui handler
+
+const chatButton = document.getElementById("chat-button");
+const chatBox = document.getElementById("chat-box");
+const chatInput = document.getElementById("chat-input");
+const chatMessages = document.getElementById("chat-messages");
+
+// Toggle visibility
+chatButton.addEventListener("click", () => {
+  chatBox.classList.toggle("hidden");
+});
+
+// Message logic
+chatInput.addEventListener("keypress", function (e) {
+  if (e.key === "Enter" && this.value.trim() !== "") {
+    const userMsg = this.value.trim();
+    appendMessage("You", userMsg);
+    this.value = "";
+
+    // Predefined simple bot response logic
+    const reply = getBotReply(userMsg);
+    setTimeout(() => {
+      appendMessage("Bot", reply);
+    }, 500);
+  }
+});
+//chat box user entry
+function appendMessage(sender, message) {
+  const msg = document.createElement("div");
+  msg.textContent = `${sender}: ${message}`;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+//chat box preload reply
+function getBotReply(message) {
+  const text = message.toLowerCase();
+  if (text.includes("price")) return "Please mention the book title for price info.";
+  if (text.includes("how to order")) return "add books to your cart then fill the adress and pincode accordingly and send it theough the order button in whatsapp, pay and we will confirm the order";
+  if (text.includes("how are you")) return "I am fine! How are you doing today?";
+  if (text.includes("available") || text.includes("stock"))
+    return "Let us check the availability. Please wait...";
+  if (text.includes("delivery")) return "We offer delivery across India within 5-7 days.";
+  if (text.includes("recommend") || text.includes("suggest"))
+    return "We recommend 'Wings of Fire' and 'Atomic Habits'. Anything specific you're looking for?";
+  if (text.includes("hello") || text.includes("hi")) return "Hi! How can I help you find a book today?";
+  return "Thank you for your query! We'll get back to you soon.";
+}
+
+function appendMessage(sender, message) {
+  const msgWrapper = document.createElement("div");
+
+  const msg = document.createElement("div");
+  msg.classList.add("message", sender === "You" ? "user" : "bot");
+  msg.textContent = message;
+  msgWrapper.appendChild(msg);
+
+  // Add status if it's user message
+  if (sender === "You") {
+    const status = document.createElement("div");
+    status.className = "status";
+    status.textContent = "delivered, seen";
+    msgWrapper.appendChild(status);
+  }
+
+  chatMessages.appendChild(msgWrapper);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+</script>
+
+<!--scripts finnaly ends here-->
+<!--return back to the home page-->
+    <br><br>
+    <a href="/index.html">← Back to Products</a>
+  </div>
+</body>
+
+<style>
+    *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Galada&family=Poppins:wght@200&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Tiro+Bangla:ital@0;1&display=swap');
+
+section {
+    padding: 40px ;
+}
+/*header*/
+#header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 80px;
+    background: #E3E6F3;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+}
+#navbar li{
+    list-style: none;
+    padding: 0 20px;
+    position: relative;
+}
+#navbar li a {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    transition: 0.3s ease;
+    text-transform: uppercase;
+    
+}
+#navbar li a:hover,
+#navbar li a.active {
+    color: #088178;
+}
+#navbar li a.active::after,
+#navbar li a:hover::after{
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: #088178;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+}
+
+/*Home page hero*/
+#hero {
+    background-image: url(/Assets/banner\ delivary.png);
+    height: 30vh;
+    width: 100%;
+    background-position: top 25% right 0%;
+    background-size: cover;
+    padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+#hero h4{
+    font-family: "Tiro Bangla", serif;
+    padding-bottom: 15px;
+    font-size: 50px;
+    color: black;
+
+}
+#hero h1{
+    font-family: "Tiro Bangla", serif;
+    color: #088178;
+    font-size: 50px;
+}
+#hero button {
+    background-color: orange;
+    color: white;
+    border-radius: 50px;
+    padding: 14px 80px 14px 65px;
+    transition: 0.5s ease;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 15px;
+}
+#hero button:hover{
+    background-color: #088178;
+}
+
+
+h1 {
+  color: #333;
+  text-align: center;
+}
+
+.product, .cart-item {
+  background-color: #fff;
+  padding: 15px;
+  margin: 10px auto;
+  border-radius: 8px;
+  max-width: 500px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+button {
+  margin: 5px;
+  padding: 6px 12px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+a {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #007BFF;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.total {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.cart-item img {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.empty-cart {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #888;
+  margin-top: 40px;
+}
+/* Chat Button */
+#chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #000;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Chat Box */
+#chat-box {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 360px;
+  max-height: 500px;
+  border-radius: 14px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  z-index: 999;
+}
+
+#chat-box.hidden {
+  display: none;
+}
+
+/* Header */
+#chat-header {
+  background-color: #f0f2f5;
+  color: #000;
+  padding: 12px 14px;
+  font-weight: bold;
+  text-align: left;
+  font-size: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Message area */
+#chat-messages {
+  flex-grow: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f9f9f9;
+}
+
+/* Message styles */
+.message {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: #000;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.message.bot {
+  align-self: flex-start;
+  background-color: #000;
+  color: white;
+  border-bottom-left-radius: 4px;
+}
+
+/* Status text */
+.status {
+  font-size: 11px;
+  color: green;
+  margin-top: -2px;
+  margin-left: auto;
+  margin-right: 4px;
+}
+
+/* Input area */
+#chat-input {
+  border: none;
+  border-top: 1px solid #ddd;
+  padding: 14px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  background: white;
+}
+@media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      input, select {
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 20px;
+      }
+    }
+
+
+</style>
+</html>

@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Street Food Supply Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css" />
+  
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1 class="logo">StreetSupply</h1>
+      <nav>
+        <ul>
+          <li><a href="#how-it-works">Home</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#suppliers">Suppliers</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="become-supplier.html">Become a supplier</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Get Raw Materials at the Lowest Prices</h2>
+      <p>Connect with trusted vendors for your street food business – fresh ingredients delivered at wholesale rates.</p>
+      <input type="text" placeholder="Search ingredients (e.g. tomatoes, onions, oil)" />
+      <button>Find Resources</button>
+    </div>
+  </section>
+
+  <!--hero section for big banner ends here-->
+<center><h1>Feature</h1></center>
+<!--feature box containg five different photo like order, delivery and all-->
+<!--1-->
+<marquee behavior="" direction="left-right">
+    <section id="feature">
+      <div class="fe-box">
+        <img src="Assets/calender.jpg" alt="">
+        <h6>Online Order</h6>
+      </div>
+      <!--2-->
+            <div class="fe-box">
+        <img src="Assets/packaging_9965301.png" alt="">
+        <h6>Packaging Care</h6>
+      </div>
+      <!--3-->
+            <div class="fe-box">
+        <img src="Assets/delivery_3585258.png" alt="">
+        <h6>Fast Shipping</h6>
+      </div>
+      <!--4-->
+            <div class="fe-box">
+        <img src="Assets/men delivering item.png" alt="">
+        <h6>Door Step Delivery</h6>
+      </div>
+      <!--5-->
+       <div class="fe-box">
+        <img src="Assets/wallet_912460.png" alt="">
+        <h6>Save Money</h6>
+      </div>
+      <!--6-->
+       <div class="fe-box">
+        <img src="Assets/customer-service_4285997.png" alt="">
+        <h6>Call Support 24*7</h6>
+      </div>
+      
+    </section>
+</marquee>
+    <!--feature box containg five different photo like order, delivery and all-->
+
+  <section id="products" class="products">
+    <div class="container">
+      <h2>Popular Products</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="/Assets/Tomato.jpg" alt="Tomatoes">
+          <h3>Fresh Tomatoes</h3>
+          <p id="price1">₹25/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity1" onchange="updateTomatoPrice()">
+            <option value="tomato1">Paji Sabji Supplier</option>
+            <option value="tomato2">Bihure Lagan</option>
+            <option value="tomato3">Maa Sabji Supplier</option>
+            <option value="tomato4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+            <button id="buy" class="buy" onclick="addToCart('Fresh Tomato', '30', '/Assets/Tomato.jpg')">Buy Now</button>
+        </div>
+
+
+
+        <div class="product-card">
+          <img src="/Assets/chilli.jpg" alt="Red Chili Powder">
+          <h3>Red Chili Powder</h3>
+          <p id="price2">₹180/kg</p>
+          <small>Min order: 5 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity2" onchange="updateRedchiliPrice()">
+            <option value="redchili1">Paji Sabji Supplier</option>
+            <option value="redchili2">Bihure Lagan</option>
+            <option value="redchili3">Maa Sabji Supplier</option>
+            <option value="redchili4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/onion.jpg" alt="Onions">
+          <h3>Red Onions</h3>
+          <p id="price3">₹20/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity3" onchange="updateOnionsPrice()">
+            <option value="onions1">Paji Sabji Supplier</option>
+            <option value="onions2">Bihure Lagan</option>
+            <option value="onions3">Maa Sabji Supplier</option>
+            <option value="onions4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+        <div class="product-card">
+          <img src="/Assets/green.jpg" alt="Green chilli">
+          <h3>Green Chilli</h3>
+          <p id="price4">₹20/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity4" onchange="updateGreenchiliPrice()">
+            <option value="greenchili1">Paji Sabji Supplier</option>
+            <option value="greenchili2">Bihure Lagan</option>
+            <option value="greenchili3">Maa Sabji Supplier</option>
+            <option value="greenchili4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+        <div class="product-card">
+          <img src="/Assets/cabbage.jpg" alt="cabbage">
+          <h3>Cabbage</h3>
+          <p id="price5">₹20/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity5" onchange="updateCabbagePrice()">
+            <option value="cabbage1">Paji Sabji Supplier</option>
+            <option value="cabbage2">Bihure Lagan</option>
+            <option value="cabbage3">Maa Sabji Supplier</option>
+            <option value="cabbage4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/fish.jpg" alt="fish">
+          <h3>Fresh Fish</h3>
+          <p id="price6">₹200/kg</p>
+          <small>Min order: 5 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity6" onchange="updateFishPrice()">
+            <option value="fish1">Paji Sabji Supplier</option>
+            <option value="fish2">Bihure Lagan</option>
+            <option value="fish3">Maa Sabji Supplier</option>
+            <option value="fish4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/garlic.jpg" alt="garlic">
+          <h3>Garlic</h3>
+          <p id="price7">₹20/kg</p>
+          <small>Min order: 3 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity7" onchange="updateGarlicPrice()">
+            <option value="garlic1">Paji Sabji Supplier</option>
+            <option value="garlic2">Bihure Lagan</option>
+            <option value="garlic3">Maa Sabji Supplier</option>
+            <option value="garlic4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+        <div class="product-card">
+          <img src="/Assets/ginger.jpg" alt="ginger">
+          <h3>Ginger</h3>
+          <p id="price8">₹30/kg</p>
+          <small>Min order: 4 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity8" onchange="updateGingerPrice()">
+            <option value="ginger1">Paji Sabji Supplier</option>
+            <option value="ginger2">Bihure Lagan</option>
+            <option value="ginger3">Maa Sabji Supplier</option>
+            <option value="ginger4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/Honey.jpg" alt="Honey">
+          <h3>Real Honey</h3>
+          <p id="price9">₹500/kg</p>
+          <small>Min order: 2 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity9" onchange="updateHoneyPrice()">
+            <option value="honey1">Paji Sabji Supplier</option>
+            <option value="honey2">Bihure Lagan</option>
+            <option value="honey3">Maa Sabji Supplier</option>
+            <option value="honey4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+        <div class="product-card">
+          <img src="/Assets/sugar.jpg" alt="Sugar">
+          <h3>Sugar</h3>
+          <p id="price10">₹40/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity10" onchange="updateSugarPrice()">
+            <option value="sugar1">Paji Sabji Supplier</option>
+            <option value="sugar2">Bihure Lagan</option>
+            <option value="sugar3">Maa Sabji Supplier</option>
+            <option value="sugar4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+        <div class="product-card">
+          <img src="/Assets/rice.jpg" alt="rice">
+          <h3>Basmati Rice</h3>
+          <p id="price11">₹50/kg</p>
+          <small>Min order: 25 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity11" onchange="updateRicePrice()">
+            <option value="rice1">Paji Sabji Supplier</option>
+            <option value="rice2">Bihure Lagan</option>
+            <option value="rice3">Maa Sabji Supplier</option>
+            <option value="rice4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/wheat.jpg" alt="wheat">
+          <h3>Whole Wheat</h3>
+          <p id="price12">₹40/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity12" onchange="updateWheatPrice()">
+            <option value="wheat1">Paji Sabji Supplier</option>
+            <option value="wheat2">Bihure Lagan</option>
+            <option value="wheat3">Maa Sabji Supplier</option>
+            <option value="wheat4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/potato.jpg" alt="potato">
+          <h3>Fresh Potatoes</h3>
+          <p id="price13">₹20/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity13" onchange="updatePotatoesPrice()">
+            <option value="potatoes1">Paji Sabji Supplier</option>
+            <option value="potatoes2">Bihure Lagan</option>
+            <option value="potatoes3">Maa Sabji Supplier</option>
+            <option value="potatoes4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/carrot.jpg" alt="carrot">
+          <h3>Fresh Carrots</h3>
+          <p id="price14">₹30/kg</p>
+          <small>Min order: 3 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity14" onchange="updateCarrotsPrice()">
+            <option value="carrots1">Paji Sabji Supplier</option>
+            <option value="carrots2">Bihure Lagan</option>
+            <option value="carrots3">Maa Sabji Supplier</option>
+            <option value="carrots4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/peas.jpg" alt="peas">
+          <h3>Green Peas</h3>
+          <p id="price15">₹25/kg</p>
+          <small>Min order: 4 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity15" onchange="updatePeasPrice()">
+            <option value="peas1">Paji Sabji Supplier</option>
+            <option value="peas2">Bihure Lagan</option>
+            <option value="peas3">Maa Sabji Supplier</option>
+            <option value="peas4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+
+
+
+
+        <div class="product-card">
+          <img src="/Assets/cauliflower.jpg" alt="cauliflower">
+          <h3>Couliflower</h3>
+          <p id="price16">₹22/kg</p>
+          <small>Min order: 10 kg</small><br>
+          <div id="supplier-price-ch">
+          <!--compare price from differnet suppliers in the website-->
+          <select name="select vendor" id="quantity16" onchange="updateCauliflowerPrice()">
+            <option value="cauliflower1">Paji Sabji Supplier</option>
+            <option value="cauliflower2">Bihure Lagan</option>
+            <option value="cauliflower3">Maa Sabji Supplier</option>
+            <option value="cauliflower4">Next Gen Supplier</option>
+          </select>
+          </div><br>
+          <button id="buy" class="buy">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+    <center><h2>Trusted Suppliers</h2></center>
+  <section id="suppliers">
+
+
+      <div class="sup">
+        <img src="Assets/sup1 (1).jpg" alt="Paji Sabji Supplier">
+        <h6>Paji Sabji Supplier <br> Punjab</h6>
+        
+      </div>
+      <div class="sup">
+        <img src="Assets/sup1 (2).jpg" alt="Bihure Lagan">
+        <h6>Bihure Lagan <br>Assam</h6>
+      </div>
+      <div class="sup">
+        <img src="Assets/sup1 (3).jpg" alt="Maa Sabji Supplier">
+        <h6>Maa Sabji Supplier <br>West Bengal</h6>
+      </div>
+      <div class="sup">
+        <img src="Assets/sup1 (4).jpg" alt="">
+        <h6>Next Gen Supplier <br>Hydrabad</h6>
+      </div>
+
+    </div>
+  </section>
+
+  <!--section for customer testimonial in overview with some card layout-->
+
+  <section class="testimonials">
+  <h2>What Our Customers Say</h2>
+  <p>Real experiences from happy users!</p>
+
+  <div class="testimonial-grid">
+
+    <div class="testimonial-card">
+      <img src="Assets/dolly.jpg" class="testimonial-img" alt="Customer 1"/>
+      <div class="testimonial-name">Dolly Chai Wala</div>
+      <div class="testimonial-role">Dolly hai mera nam kartab dekhana mera kam, Mumbai</div>
+      <p class="testimonial-text">
+        Hi, guys mai hun dolly chai wala apka fevourit, upun ehi se mal kharidta hai sasta milta hai!"
+      </p>
+    </div>
+
+    <div class="testimonial-card">
+      <img src="Assets/badapav.jpg" class="testimonial-img" alt="Customer 2"/>
+      <div class="testimonial-name">Bada Pav Girl</div>
+      <div class="testimonial-role">Bada Pav Bechti hu, Delhi</div>
+      <p class="testimonial-text">
+        "Main delhi mei bada pav bechti hu guys, din ka accha kamaleti hu. iss site main sab sasta hai!"
+      </p>
+    </div>
+
+    <div class="testimonial-card">
+      <img src="Assets/Raju da.jpg" class="testimonial-img" alt="Customer 3"/>
+      <div class="testimonial-name">Raju Da</div>
+      <div class="testimonial-role">Pocket Porota seller, West Bengal</div>
+      <p class="testimonial-text">
+        "Amar pocket porota eto ta valo ar sosta te ami ei website theke moida kine korte perechi, thanks to this website."
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!--section for support and contact form submission-->
+<section class="contact-section">
+  <h2>Contact & Support</h2>
+  <p>Have a question or feedback? Reach out to us below.</p>
+  
+  <form id="contactForm">
+    <div class="form-group">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required />
+    </div>
+    
+    <div class="form-group">
+      <label for="message">Your Message</label>
+      <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Send Message</button>
+  </form>
+</section>
+
+
+<!--footer section-->
+
+  <!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+
+    <!-- About Section with Dropdown -->
+    <div class="footer-column">
+      <h3>About</h3>
+      <button class="accordion-toggle" onclick="toggleAccordion()">About This Website ⌄</button>
+      <div class="accordion-content" id="aboutContent">
+        <p>
+          This website, StreetSupply, is a curated online raw material and fresh vegetables shop offering a variety of general vegetables required to run a street shop. Our mission is to make the supply chain of raw materials to street vendor easily.
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-column">
+      <h3>Quick Links</h3>
+      <p><a href="#products">Products</a></p>
+      <p><a href="/become-a-supplier.html">Become a Supplier</a></p>
+      <p><a href="/contact.html">Contact & Support</a></p>
+      <p><a href="/privacy.html">Privacy Policy</a></p>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="footer-column">
+      <h3>Contact Us</h3>
+      <p>Email: support@StreetSupply.in</p>
+      <p>Phone: +91 98765 xxxx</p>
+      <p>Location: Paji Sabji Supplier, India</p>
+      <p><a href="https://wa.me/919876543210" target="_blank">Message on WhatsApp</a></p>
+    </div>
+
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    © 2025 StreetSupply.in — All rights reserved.
+  </div>
+</footer>
+
+
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
+
+</body>
+</html>

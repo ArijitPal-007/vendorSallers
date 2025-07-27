@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+header {
+  background-color: #ff5722;
+  padding: 0.5rem 0;
+  position: sticky;
+}
+.logo {
+  color: #fff;
+  font-size: 1.8rem;
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.log-out{
+    color: #f5f5f5;
+    background-color: #ff5722;
+}
+input, button.add {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin: 10px 0 ;
+    padding: 10px;
+}
+.success {
+    color: green;
+}
+#product-form{
+    display: block;
+    justify-content: center;
+    align-items: center;
+}

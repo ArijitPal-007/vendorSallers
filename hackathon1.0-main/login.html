@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login & Signup</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 400px;
+      color: #fff;
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #fff;
+      color: #0072ff;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    .switch {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .switch a {
+      color: #fff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #ff6b6b;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        margin: 10px;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="form-container">
+    <h2 id="form-title">Login</h2>
+    <form id="auth-form">
+      <div class="error" id="error"></div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+      </div>
+      <div class="form-group" id="extra-field" style="display: none;">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" />
+      </div>
+      <button class="btn" type="submit" id="submit-btn">Login</button>
+      <div class="switch">
+        <span id="switch-msg">Don't have an account? <a onclick="toggleForm()">Sign Up</a></span>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const formTitle = document.getElementById('form-title');
+    const authForm = document.getElementById('auth-form');
+    const extraField = document.getElementById('extra-field');
+    const switchMsg = document.getElementById('switch-msg');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorElement = document.getElementById('error');
+
+    let isLogin = true;
+
+    function toggleForm() {
+      isLogin = !isLogin;
+      formTitle.textContent = isLogin ? 'Login' : 'Sign Up';
+      extraField.style.display = isLogin ? 'none' : 'block';
+      submitBtn.textContent = isLogin ? 'Login' : 'Sign Up';
+      switchMsg.innerHTML = isLogin
+        ? `Don't have an account? <a onclick="toggleForm()">Sign Up</a>`
+        : `Already have an account? <a onclick="toggleForm()">Login</a>`;
+      errorElement.textContent = '';
+    }
+
+    authForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      errorElement.textContent = '';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      
+      if (isLogin) {
+        // Login logic
+        try {
+          const response = await fetch('http://localhost:8000/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+          });
+
+          const data = await response.json();
+          
+          if (response.ok) {
+            // Successful login
+            localStorage.setItem("loggedInUser", email);
+            window.location.href = "index.html";
+          } else {
+            // Login failed
+            errorElement.textContent = data.message || 'Login failed. Please try again.';
+          }
+        } catch (error) {
+          errorElement.textContent = 'An error occurred. Please try again.';
+          console.error('Login error:', error);
+        }
+      } else {
+        // Signup logic
+        const name = document.getElementById("name").value.trim();
+        
+        try {
+          const response = await fetch('http://localhost:8000/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: name,
+              email: email,
+              password: password
+            })
+          });
+
+          const data = await response.json();
+          
+          if (response.ok) {
+            // Successful signup
+            errorElement.textContent = 'Registration successful! Please login.';
+            toggleForm(); // Switch back to login form
+          } else {
+            // Signup failed
+            errorElement.textContent = data.message || 'Registration failed. Please try again.';
+          }
+        } catch (error) {
+          errorElement.textContent = 'An error occurred. Please try again.';
+          console.error('Signup error:', error);
+        }
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = isLogin ? 'Login' : 'Sign Up';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Become a Supplier</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 35px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 500px;
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .form-group input, 
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .form-group input[type="file"] {
+      background-color: #fff;
+      color: #000;
+      padding: 12px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #fff;
+      color: #0072ff;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Become a Supplier</h2>
+    <form id="supplierForm">
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="number" id="phone" name="phone" placeholder="e.g. 9876543210" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" name="email" placeholder="e.g. supplier@example.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="company">Company Name</label>
+        <input type="text" id="company" name="company" placeholder="Your company/brand name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="gst">Upload GST Certificate</label>
+        <input type="file" id="gst" name="gst" accept=".jpg,.jpeg,.png,.pdf" required />
+      </div>
+
+      <div class="form-group">
+        <label for="govtid">Upload Government ID</label>
+        <input type="file" id="govtid" name="govtid" accept=".jpg,.jpeg,.png,.pdf" required />
+      </div>
+
+      <div class="form-group">
+        <label for="message">Short Description</label>
+        <textarea id="message" name="message" rows="3" placeholder="Tell us about your supply ability..." required></textarea>
+      </div>
+
+      <a href="become-supplier.html"><button type="submit" class="btn">Submit Application</button></a>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('supplierForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      window.location.href = "submission.html";
+    });
+  </script>
+</body>
+</html>

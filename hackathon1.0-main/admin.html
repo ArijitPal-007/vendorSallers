@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="admin.css">
+    <title>Admin</title>
+    <style>
+        /* Added styles for product card and messages */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #product-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        #product-form input, #product-form textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #product-form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .add {
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none; /* Hidden by default */
+        }
+        .product-card h3 {
+            margin-top: 0;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .checkout-btn {
+            padding: 10px 15px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const user = localStorage.getItem("loggedInUser");
+        if (!user) {
+            window.location.href = "login.html";
+        }
+    </script>
+    
+    <header>
+        <div class="container">
+            <h1 class="logo">StreetSupply</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">🏚️Home</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><button class="log-out" onclick="logout()">logout</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h2>Welcome, <span id="user-email"></span>!</h2>
+        <h2>Add New Product</h2>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="product-form">
+            <input type="text" id="product-name" placeholder="Product Name" required>
+            <input type="number" id="product-price" placeholder="Product Price" required>
+            <textarea id="product-description" placeholder="Product Description" required></textarea>
+            <input type="file" id="product-image" accept="image/*" required>
+            <button class="add" type="submit">Add Product</button>
+        </form>
+        
+        <!-- Product Card (hidden by default) -->
+        <div id="product-card" class="product-card">
+            <h3>Product Added Successfully!</h3>
+            <div id="product-image-preview"></div>
+            <p><strong>Name:</strong> <span id="card-product-name"></span></p>
+            <p><strong>Description:</strong> <span id="card-product-description"></span></p>
+            <p><strong>Price:</strong> $<span id="card-product-price"></span></p>
+            <h2>Your requested product will be processed soon</h2>
+            <button class="checkout-btn" onclick="proceedToIndex()">Home page</button>
+        </div>
+    </div>
+
+    <script>
+        const loggedUser = localStorage.getItem("loggedInUser");
+        const productForm = document.getElementById("product-form");
+        const messageDiv = document.getElementById("message");
+        const productCard = document.getElementById("product-card");
+
+        if (loggedUser) {
+            document.getElementById("user-email").textContent = loggedUser;
+        } else {
+            window.location.href = "login.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("loggedInUser");
+            window.location.href = "login.html";
+        }
+
+        function proceedToIndex() {
+            window.location.href = "index.html";
+        }
+
+        productForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById("product-name").value.trim();
+            const price = document.getElementById("product-price").value;
+            const description = document.getElementById("product-description").value.trim();
+            const imageFile = document.getElementById("product-image").files[0];
+            
+            // Validation
+            if (!name || !price || !description || !imageFile) {
+                showMessage("Please fill all fields", "error");
+                return;
+            }
+
+            // Display product card
+            document.getElementById("card-product-name").textContent = name;
+            document.getElementById("card-product-price").textContent = price;
+            document.getElementById("card-product-description").textContent = description;
+            
+            // Display image preview
+            const imagePreview = document.getElementById("product-image-preview");
+            imagePreview.innerHTML = '';
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imagePreview.appendChild(img);
+                }
+                reader.readAsDataURL(imageFile);
+            }
+            
+            // Show success message and product card
+            showMessage("Product added successfully!", "success");
+            productCard.style.display = 'block';
+        });
+
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = "block";
+            
+            setTimeout(() => {
+                messageDiv.style.display = "none";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

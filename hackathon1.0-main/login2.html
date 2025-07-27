@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login & Signup</title>
+
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7fa;
+    }
+
+    .open-btn {
+      display: block;
+      margin: 100px auto;
+      padding: 12px 20px;
+      background: #0072ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-overlay.active {
+      display: flex;
+    }
+
+    .popup-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .popup-box h2 {
+      margin-top: 0;
+      color: #0072ff;
+      text-align: center;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .toggle-link a {
+      color: #0072ff;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #0072ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background: #005fd6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Trigger Button -->
+<button class="open-btn" onclick="openPopup()">Login / Signup</button>
+
+<!-- Popup Modal -->
+<div class="popup-overlay" id="authPopup">
+  <div class="popup-box">
+    <button class="close-btn" onclick="closePopup()">✕</button>
+    <h2 id="formTitle">Login</h2>
+
+    <form id="authForm">
+      <div class="form-group" id="nameGroup" style="display: none;">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Your full name" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Login</button>
+
+      <div class="toggle-link">
+        <span id="toggleText">Don't have an account? <a onclick="toggleForm()">Sign Up</a></span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toastify JS -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script>
+  const popup = document.getElementById("authPopup");
+  const formTitle = document.getElementById("formTitle");
+  const toggleText = document.getElementById("toggleText");
+  const submitBtn = document.getElementById("submitBtn");
+  const nameGroup = document.getElementById("nameGroup");
+  let isLogin = true;
+
+  function openPopup() {
+    popup.classList.add("active");
+  }
+
+  function closePopup() {
+    popup.classList.remove("active");
+  }
+
+  function toggleForm() {
+    isLogin = !isLogin;
+    formTitle.textContent = isLogin ? "Login" : "Sign Up";
+    nameGroup.style.display = isLogin ? "none" : "block";
+    submitBtn.textContent = isLogin ? "Login" : "Sign Up";
+    toggleText.innerHTML = isLogin
+      ? `Don't have an account? <a onclick="toggleForm()">Sign Up</a>`
+      : `Already have an account? <a onclick="toggleForm()">Login</a>`;
+  }
+
+  document.getElementById("authForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const msg = isLogin
+      ? `Welcome back, ${email}!`
+      : `Thank you for signing up, ${email}!`;
+
+    Toastify({
+      text: msg,
+      duration: 4000,
+      gravity: "top",
+      position: "center",
+      backgroundColor: isLogin ? "#0072ff" : "#28a745",
+    }).showToast();
+
+    this.reset();
+    closePopup();
+  });
+</script>
+
+</body>
+</html>
